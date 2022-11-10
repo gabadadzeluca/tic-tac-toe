@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+  <link rel="stylesheet" href="style.css">
   <link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon-32x32.png">
   
   <title>Frontend Mentor | Tic Tac Toe</title>
@@ -11,36 +11,90 @@
 <body>
 
   <!-- New game menu start -->
-
-  Pick player 1's mark
-  Remember: X goes first
-
-  New Game (vs CPU)
-  New Game (vs player)
+  <div id="start-board">
+    <img src="assets/logo.svg" alt="logo" class="logo">
+    <div id="choice">
+      <!--CHOOSE X OR O img-->
+      <p class="white">Pick player 1's mark</p>
+      <div id="p1-choice">
+        <img src="assets/icon-x.svg" alt="X" class="x">
+        <img src="assets/icon-o.svg" alt="O" class="o">
+      </div>
+      
+      <p class="grey">Remember: X goes first</p>
+    </div>
+    
+    <div class="buttons-start">
+      <button id="cpu-btn">New Game (vs CPU)</button>
+      <button id="player-btn">New Game (vs player)</button>
+    </div>
+  </div>
 
   <!-- New game menu end -->
 
+
   <!-- Game board start -->
+  <div id="game-board">
+    <!-- x/o icon --> 
+    <div class="inline">
+      <img src="assets/logo.svg" alt="logo" class="logo">
+      <p id="turn-box"><img src="assets/icon-x.svg" id="turn">turn</p>
+      <button id="restart-btn"></button>
+    </div>
+    <div id="grid">
+      <div id="1"></div>
+      <div id="2"></div>
+      <div id="3"></div>
+      <div id="4"></div>
+      <div id="5"></div>
+      <div id="6"></div>
+      <div id="7"></div>
+      <div id="8"></div>
+      <div id="9"></div>
+    </div>
+    <div class="scores">
+      <div class="blue-box">
+        <p>X (You)</p>
+        <p id="x-score"></p>
+      </div>
+      <div class="silver-box">
+        <p>Ties</p>
+        <!-- Ties score -->
+        <p id="ties"></p>
+      </div>
+      <div class="orange-box">
+        <p> X (CPU)</p>
+        <!-- CPU score -->
+        <p id="o-score"></p>
+      </div>
+       
 
-  <!-- x/o icon --> turn
+    </div>
+   
+    <div id="end-text">
+      
+      <p id="text-lose" class="cpu">Oh no, you lost</p>
+      <p id="text-win" class="cpu">You won!</p>
 
-  X (You) <!-- Your score -->
-  Ties <!-- Ties score -->
-  X (CPU) <!-- CPU score -->
+      <p class="multiplayer">Player <span id="player-num"></span>wins!</p>
 
-  Oh no, you lost
-  You won!
-  Player <!-- 1/2 --> wins!
+      <h4>
+        <img src="assets/icon-x.svg" alt="X" class="symbol">
+        <img src="assets/icon-o.svg" alt="O" class="symbol">
+        <!-- x/o icon --> takes the round
+      </h4>
+      <p id="text-tie">Round tied</p>
+      
+      <p class="restart">Restart game?</p>
+      <div class="buttons-end">
+        <button class="end-btn quit">Quit</button>
+        <button class="end-btn next-rd">Next round</button>
+        <button class="restart cancel">No, cancel</button>
+        <button class="restart cont">Yes, restart</button>
+      </div>
+    </div>
 
-  <!-- x/o icon --> takes the round
-  Round tied
-  Restart game?
-
-  Quit
-  Next round
-  No, cancel
-  Yes, restart
-
+  </div>
   <!-- Game board end -->
 
 </body>
