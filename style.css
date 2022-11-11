@@ -86,8 +86,10 @@ body * {
 }
 #start-board #p1-choice .o {
   padding: 1.1rem 5rem;
-  background: var(--silver);
+}
+#start-board #p1-choice .player-1 {
   border-radius: 1rem;
+  background: var(--silver);
 }
 #start-board .buttons-start {
   width: 100%;
@@ -185,6 +187,16 @@ body * {
   box-shadow: inset 0rem -0.8rem 0rem #10212A;
   background-size: 4rem;
 }
+#game-board #grid .circle, #game-board #grid .cross {
+  background-repeat: no-repeat;
+  background-position: center;
+}
+#game-board #grid .circle {
+  background-image: url("assets/icon-o.svg");
+}
+#game-board #grid .cross {
+  background-image: url("assets/icon-x.svg");
+}
 #game-board .scores {
   margin-top: 2rem;
   display: grid;
@@ -228,30 +240,60 @@ body * {
   height: 22.8rem;
   background-color: var(--semi-dark-navy);
 }
-#end-text * {
+#end-text #end-box {
+  display: flex;
+  width: 27.9rem;
+  height: 14rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+#end-text #end-box * {
   margin: 0;
 }
-#end-text img {
+#end-text #end-box img {
   width: 3rem;
 }
-#end-text button {
+#end-text #end-box h4 {
+  font-size: 2.4rem;
+  font-weight: var(--bold);
+}
+#end-text #end-box button {
+  padding: 0 1.6rem;
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
   font-size: 1.6rem;
   font-weight: var(--bold);
   border: none;
   border-radius: 1rem;
   height: 5.2rem;
 }
-#end-text .buttons-end {
-  display: inline-flex;
+#end-text #end-box .buttons-end {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  -moz-column-gap: 1.6rem;
+       column-gap: 1.6rem;
 }
-#end-text .multiplayer, #end-text .restart {
+#end-text #end-box .multiplayer, #end-text #end-box .restart {
   display: none;
 }
-#end-text .quit, #end-text .cancel {
+#end-text #end-box .quit, #end-text #end-box .cancel {
   background-color: var(--silver);
   box-shadow: inset 0rem -0.4rem 0rem #6B8997;
 }
-#end-text .next-rd, #end-text .cont {
+#end-text #end-box .next-rd, #end-text #end-box .cont {
   background-color: var(--light-yellow);
   box-shadow: inset 0rem -0.4rem 0rem #CC8B13;
+}
+#end-text #end-box .solo, #end-text #end-box .multiplayer {
+  color: var(--silver);
+  font-size: 1.4rem;
+  font-weight: var(--bold);
+}
+#end-text #end-box #text-tie {
+  color: var(--silver);
+  font-size: 2.4rem;
+  font-weight: var(--bold);
+  letter-spacing: 0.15rem;
 }/*# sourceMappingURL=style.css.map */
