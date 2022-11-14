@@ -17,16 +17,18 @@ let circleTurn;
 const crossCls = 'cross';
 const circleCls = 'circle';
 
+//player 1
+const player1 = document.querySelector('.player-1');
+console.log("player1: ", player1.classList[0]);
+
 const restartElements = document.querySelectorAll('.restart');
 
 const grid = document.querySelector('#grid').childNodes;
 
 
-// get elements 
 
 // starting screen element
 const startScreen = document.querySelector('#start-board');
-console.log("start board", startScreen);
 
 // buttons
 const cpuBtn = document.querySelector('#cpu-btn');
@@ -82,21 +84,26 @@ function endGameScreen(){
 
 
 // check the current condition of board
-function checkGrid(currectCls){
-    document.addEventListener('click', function winner(){ 
+function checkGrid(currentCls){
+    document.addEventListener('click',function winner(){ 
         // loop through the patterns
         winPatterns.forEach(win=>{
             // detect player's win
-            if(document.getElementById(win[0]).classList == currectCls && 
-            document.getElementById(win[1]).classList == currectCls &&
-            document.getElementById(win[2]).classList == currectCls){
-                console.log(currectCls, 'wins!!!');
+            if(document.getElementById(win[0]).classList == currentCls && 
+            document.getElementById(win[1]).classList == currentCls &&
+            document.getElementById(win[2]).classList == currentCls){
+                console.log(currentCls, 'wins!!!');
                 gameActive = false;
                 document.removeEventListener('click', winner);
+                //stop responding to clicks 
+                grid.forEach(element=>{
+                    element.removeEventListener('click', handeClick);
+                });
             }
         });
     });
 }
+
 
 
 function startGame() {
@@ -106,27 +113,54 @@ function startGame() {
     });
 }
 
-function handeClick(e){
+function handeClick(e) {
     const box = e.target;
-    const currectCls = circleTurn  ? circleCls : crossCls; 
-    placeMark(box,currectCls);
-    checkGrid(currectCls);
+    const currentCls = circleTurn  ? circleCls : crossCls; 
+    placeMark(box,currentCls);
+    checkGrid(currentCls);
+    showTurn(circleTurn); // show whose turn it is
+    // showHoverState();
 }
 
 
-function placeMark(box, currectCls){
-    box.classList.add(currectCls);
+function placeMark(box, currentCls){
+    box.classList.add(currentCls);
     //switch turns
     switchTurn();
 }
 
-function switchTurn(){
+function switchTurn() {
     circleTurn = !circleTurn;
 }
 
+function showTurn(circleTurn) {
+    const turn = document.getElementById('turn');
+    let src;
+    if(circleTurn){
+        src = 'x';
+    }else{
+        src = 'o';
+    }
+    turn.src = `assets/icon-${src}.svg`;
+}
 
+function showHoverState(box){
+    //add hover state
+}
 
-
+//reset button
+const resetBtn = document.getElementById('restart-btn');
+resetBtn.addEventListener('click', resetAll);
+function resetAll(){
+    //reset everything
+    const divs = document.querySelectorAll('#grid div');
+    divs.forEach(div=>{
+        // div.classList.remove(circleCls);
+        // div.classList.remove(crossCls);
+        // eventlistener stops working!!!
+    })
+    console.log(divs);
+}
 
 
 // load starting screen
