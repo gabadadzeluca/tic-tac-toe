@@ -35,10 +35,6 @@ const circleIcon = document.querySelector('.o');
 
 // add event listeners
 
-// add classname to chosen icon ONLY !
-
-
-
 // multiplayer or solo
 cpuBtn.addEventListener('click', ()=>{
     game('solo');
@@ -50,9 +46,16 @@ playerBtn.addEventListener('click', ()=>{
 //grid element
 const gameScreen = document.querySelector('#game-board');
 
+
+
 // ending screen element
 const endScreen = document.querySelector('#end-text');
 
+//multiplayer gamemode end-screen
+const multiplayerEndScreen = Array.from(document.querySelectorAll('.multiplayer'));
+const winnerEndScreen = Array.from(document.querySelectorAll('.winner'));
+//solo gamemode end-screen
+const soloPlayerEndScreen = Array.from(document.querySelectorAll('.solo'));
 
 //display start screen
 function startGameScreen(){
@@ -69,17 +72,40 @@ function mainGameScreen(){
 }
 
 // display ending screen
-function endGameScreen(){
+function endGameScreen(gamemode,winner){
     endScreen.style.display = 'flex';
     startScreen.style.display = 'none';
+    if(winner){
+        document.getElementById('text-tie').style.display = 'none';
+        console.log("the winner is ",winner);
+        winnerEndScreen.forEach(element =>{
+            element.style.display = 'inline-flex';
+        })
+    }
+    if(gamemode == 'multiplayer'){
+        multiplayerEndScreen.forEach(element =>{
+            element.style.display = 'flex';
+        });
+        soloPlayerEndScreen.forEach(element=> {
+            element.style.display = 'none';
+        });
+    }else //if gamemode is solo
+    { 
+        multiplayerEndScreen.forEach(element =>{
+            element.style.display = 'none';
+        });
+        soloPlayerEndScreen.forEach(element=> {
+            element.style.display = 'flex';
+        });
+    }
 }
 
 
 
 
 // check the current condition of board
-function checkGrid(){
-    document.addEventListener('click', ()=>{ 
+function checkGrid(gamemode){
+    document.addEventListener('click', function winner(){ 
         // loop through the patterns
         winPatterns.forEach(win=>{
             // detect player's win
@@ -88,21 +114,23 @@ function checkGrid(){
             document.getElementById(win[2]).classList == 'cross'){
                 console.log('cross wins!!!');
                 gameActive = false;
+                endGameScreen(gamemode, 'cross');
+                document.removeEventListener('click', winner);
             }
             if(document.getElementById(win[0]).classList == 'circle' && 
             document.getElementById(win[1]).classList == 'circle' &&
             document.getElementById(win[2]).classList == 'circle'){
                 console.log('circle wins!!!');
                 gameActive = false;
+                endGameScreen(gamemode, 'circle');
+                document.removeEventListener('click', winner);
             }
         });
-
     });
-
-
 }
 
 function multiplayerGame(){
+    let gamemode = 'multiplayer';
     const playerOne = document.querySelector('.player-1');
     console.log(playerOne.id);
     let playerOneChoice = playerOne.id.substring(7);
@@ -112,13 +140,13 @@ function multiplayerGame(){
     }else{
         playerTwoChoice = 'cross';
     }
-    checkGrid();
+    checkGrid(gamemode);
     // add player icons to the grid and switch between users
     let i = 0;
     grid.forEach(box => {
         box.addEventListener('click', function turns(){
             console.log("clicked" ,box.id);
-            console.log('clicks: ', i);
+            console.log('clicks: ', i+1);
             if(box.classList != 'circle' && box.classList != 'cross'){
                 i++;
                 if(i % 2 == 0){
@@ -136,7 +164,7 @@ function multiplayerGame(){
                 }
             }
 
-        })
+        });
     });
 
 }

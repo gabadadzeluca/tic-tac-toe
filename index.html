@@ -17,8 +17,9 @@
       <!--CHOOSE X OR O img-->
       <p class="white">Pick player 1's mark</p>
       <div id="p1-choice">
-        <img src="assets/icon-x.svg" alt="X" class="x">
-        <img src="assets/icon-o.svg" alt="O" class="o">
+        <!-- add svgs instead of imgs -->
+        <img src="assets/icon-x.svg" alt="X" class="x" id="player-cross">
+        <img src="assets/icon-o.svg" alt="O" class="o player-1" id="player-circle">
       </div>
       
       <p class="grey">Remember: X goes first</p>
@@ -72,25 +73,28 @@
     </div>
    
     <div id="end-text">
-      
-      <p id="text-lose" class="cpu">Oh no, you lost</p>
-      <p id="text-win" class="cpu">You won!</p>
+      <div id="end-box">
 
-      <p class="multiplayer">Player <span id="player-num"></span>wins!</p>
+          <p id="text-lose" class="solo">Oh no, you lost</p>
+          <p id="text-win" class="solo">You won!</p>
 
-      <h4>
-        <img src="assets/icon-x.svg" alt="X" class="symbol">
-        <img src="assets/icon-o.svg" alt="O" class="symbol">
-        <!-- x/o icon --> takes the round
-      </h4>
-      <p id="text-tie">Round tied</p>
-      
-      <p class="restart">Restart game?</p>
-      <div class="buttons-end">
-        <button class="end-btn quit">Quit</button>
-        <button class="end-btn next-rd">Next round</button>
-        <button class="restart cancel">No, cancel</button>
-        <button class="restart cont">Yes, restart</button>
+          <p class="multiplayer winner">Player <span id="winner-num"></span>wins!</p>
+
+          <h4>
+            <!-- <img src="assets/icon-x.svg" alt="X" class="symbol"> -->
+            <!-- <img src="assets/icon-o.svg" alt="O" class="symbol"> -->
+            <img src="" alt="w" id="winner-symbol" class="winner">
+            takes the round
+          </h4>
+          <p id="text-tie">Round tied</p>
+          
+          <p class="restart">Restart game?</p>
+          <div class="buttons-end">
+            <button class="end-btn quit">Quit</button>
+            <button class="end-btn next-rd">Next round</button>
+            <button class="restart cancel">No, cancel</button>
+            <button class="restart cont">Yes, restart</button>
+          </div>
       </div>
     </div>
 
