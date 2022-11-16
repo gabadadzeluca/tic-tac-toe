@@ -33,9 +33,9 @@ const startScreen = document.querySelector('#start-board');
 // buttons
 const cpuBtn = document.querySelector('#cpu-btn');
 const playerBtn = document.querySelector('#player-btn');
-//choosing player 1's mark
-const playerChoice = document.querySelector('#p1-choice').childNodes; 
-console.log("player choice: ",playerChoice);
+// player 1's symbol
+const playerChoices = Array.from(document.querySelectorAll('.choice'));
+
 const squareIcon = document.querySelector('.x');
 const circleIcon = document.querySelector('.o');
 
@@ -53,17 +53,35 @@ playerBtn.addEventListener('click', ()=>{
 const gameScreen = document.querySelector('#game-board');
 
 
+///end screen elements///
 
 // ending screen element
 const endScreen = document.querySelector('#end-text');
 
-//switch screens 
+
+// multiplayer game end-screen
+const multiplayerEndScreen = Array.from(document.querySelectorAll('.multiplayer'));
+//solo game end-scren
+const soloEndScreen = Array.from(document.querySelectorAll('.solo'));
+
+//tie game end-text
+const tieText = document.getElementById('text-tie');
+
+// winner symbol
+const winnerSymbol = document.getElementById('winner-symbol');
+// winner number
+const winnerNum = document.getElementById('winner-num');
+//winner text 
+const winnerText = document.getElementById('winner-text');
+
 
 //display start screen
 function startGameScreen(){
     startScreen.style.display = 'flex';
     gameScreen.style.display = 'none';
     endScreen.style.display = 'none';
+
+    console.log('player1: ',playerOneChoice(player1));
 }
 
 //display game screen
@@ -80,11 +98,17 @@ function endGameScreen(){
 }
 //
 
-
+//choose player-1
+function playerOneChoice(player1){
+    // circle or cross?
+    let playerOne = player1.id.slice(7);
+    return playerOne;
+    
+}
 
 
 // check the current condition of board
-function checkGrid(currentCls){
+function checkWin(currentCls){
     document.addEventListener('click',function winner(){ 
         // loop through the patterns
         winPatterns.forEach(win=>{
@@ -99,15 +123,62 @@ function checkGrid(currentCls){
                 grid.forEach(element=>{
                     element.removeEventListener('click', handeClick);
                 });
+                //display end screen
+                displayEnd(currentCls);
             }
         });
     });
 }
 
+function displayEnd(currentCls){
+    endGameScreen();
+
+    // hide solo-game and tie screen messages
+    soloEndScreen.forEach(element =>{
+        element.style.display = 'none';
+    });
+    tieText.style.display = 'none';
+    //display winner's symbol, number and color;
+    displayWinnerAndColor(currentCls);
+    //display multiplayer class elements
+    multiplayerEndScreen.forEach(element=>{
+        element.style.display = 'inline-flex';
+    })
+
+}
+
+function displayWinnerAndColor(currentCls){
+    let src;
+    let color;
+    let player = playerOneChoice(player1);
+    if(currentCls == circleCls){
+        src = 'o'
+        color = 'var(--light-yellow)';
+    }else{
+        src = 'x'
+        color = 'var(--light-blue)';
+    }
+
+    // assignm number of winner
+    if(currentCls == player){
+        winnerNum.innerHTML = '1';
+    }else{
+        winnerNum.innerHTML = '2';
+    }
+
+    winnerSymbol.src = `assets/icon-${src}.svg`;
+    winnerText.style.color = color;
+}
 
 
 function startGame() {
-    circleTurn = false;
+    // assign player1's turn and symbol
+    if(playerOneChoice(player1) == circleCls){
+        circleTurn = true;
+    }else{
+        circleTurn = false;
+    }
+
     grid.forEach(element =>{
         element.addEventListener('click', handeClick, {once: true});
     });
@@ -117,7 +188,7 @@ function handeClick(e) {
     const box = e.target;
     const currentCls = circleTurn  ? circleCls : crossCls; 
     placeMark(box,currentCls);
-    checkGrid(currentCls);
+    checkWin(currentCls);
     showTurn(circleTurn); // show whose turn it is
     // showHoverState();
 }
@@ -153,6 +224,9 @@ const resetBtn = document.getElementById('restart-btn');
 resetBtn.addEventListener('click', resetAll);
 function resetAll(){
     //reset everything
+
+    //add reset?  screen
+
     const divs = document.querySelectorAll('#grid div');
     divs.forEach(div=>{
         // div.classList.remove(circleCls);
