@@ -187,7 +187,13 @@ body * {
   box-shadow: inset 0rem -0.8rem 0rem #10212A;
   background-size: 4rem;
 }
-#game-board #grid .circle, #game-board #grid .cross {
+#game-board #grid .circle-hover {
+  background-image: url("assets/icon-o-outline.svg");
+}
+#game-board #grid .cross-hover {
+  background-image: url("assets/icon-o-outline.svg");
+}
+#game-board #grid .circle, #game-board #grid .cross, #game-board #grid .circle-hover, #game-board #grid .cross-hover {
   background-repeat: no-repeat;
   background-position: center;
 }
@@ -232,6 +238,7 @@ body * {
   flex-direction: column;
   text-align: center;
   align-items: center;
+  justify-content: center;
   position: absolute;
   top: 30%;
   bottom: 21rem;
@@ -258,6 +265,12 @@ body * {
   font-size: 2.4rem;
   font-weight: var(--bold);
 }
+#end-text #end-box #winner-text {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-around;
+  width: 27.9rem;
+}
 #end-text #end-box button {
   padding: 0 1.6rem;
   width: -webkit-max-content;
@@ -268,6 +281,11 @@ body * {
   border: none;
   border-radius: 1rem;
   height: 5.2rem;
+}
+#end-text #end-box .winner {
+  display: inline-flex;
+  justify-content: space-evenly;
+  width: 11.8rem;
 }
 #end-text #end-box .buttons-end {
   display: grid;
