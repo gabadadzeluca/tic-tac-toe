@@ -11,7 +11,10 @@ const winPatterns = [
 ]
 
 let gameActive = true;
-
+//starting points
+let circlePoints = 0;
+let crossPoints = 0;
+let countTies = 0;
 //who is to play
 let circleTurn;
 const crossCls = 'cross';
@@ -36,12 +39,8 @@ const playerBtn = document.querySelector('#player-btn');
 // player 1's symbol
 const playerChoices = Array.from(document.querySelectorAll('.choice'));
 
-const squareIcon = document.querySelector('.x');
-const circleIcon = document.querySelector('.o');
 
-// add event listeners
-
-// multiplayer or solo
+// multiplayer or solo game
 cpuBtn.addEventListener('click', ()=>{
     game('solo');
 });
@@ -59,6 +58,7 @@ const gameScreen = document.querySelector('#game-board');
 const endScreen = document.querySelector('#end-text');
 
 
+
 // multiplayer game end-screen
 const multiplayerEndScreen = Array.from(document.querySelectorAll('.multiplayer'));
 //solo game end-scren
@@ -73,6 +73,91 @@ const winnerSymbol = document.getElementById('winner-symbol');
 const winnerNum = document.getElementById('winner-num');
 //winner text 
 const winnerText = document.getElementById('winner-text');
+
+//BUTTONS//
+
+// end-screen btns
+const endBtns = document.querySelectorAll('.end-btn');
+
+//reset button
+const resetBtn = document.getElementById('restart-btn');
+resetBtn.addEventListener('click', resetFunction);
+
+// Yes restart and No don't buttons
+// No, cancel btn
+const noBtn = document.querySelector('.cancel');
+console.log(noBtn);
+noBtn.addEventListener('click', ()=>{
+    mainGameScreen();
+})
+
+// Yes, cancel btn
+const yesBtn = document.querySelector('.cont');
+console.log(yesBtn);
+// remove score/ menu and clear grid
+yesBtn.addEventListener('click', ()=>{
+    resetAll();
+    mainGameScreen();
+});
+
+//reset btn function
+function resetFunction(){
+    // prompt reset menu
+    restartElements.forEach(element =>{
+        element.style.display = 'block';
+    });
+    restartGameScreen(); 
+}
+
+function restartGameScreen(){
+    endGameScreen();
+    //hide elements
+    winnerText.style.display = 'none';
+    tieText.style.display = 'none';
+    soloEndScreen.forEach(element =>{
+        element.style.display = 'none';
+    });
+    endBtns.forEach(button =>{
+        button.style.display = 'none';
+    });
+    multiplayerEndScreen.forEach(element =>{
+        element.style.display = 'none';
+    });
+}
+
+// clear grid
+function resetAll(){
+    //reset everything
+
+    const divs = document.querySelectorAll('#grid div');
+    divs.forEach(div=>{
+        div.classList.remove(circleCls);
+        div.classList.remove(crossCls);
+        startGame();
+    });
+}
+//quit btn
+const quitBtn = document.querySelector('.quit');
+quitBtn.addEventListener('click', quit)
+function quit(){
+    console.log("quit");
+    startGameScreen();
+    resetAll();
+}
+
+//next round button
+const nextRoundBtn = document.querySelector('.next-rd');
+nextRoundBtn.addEventListener('click', nextRound);
+function nextRound(){
+    console.log("Next Round");
+    //add points to the winner if there's one
+    // addPoint(currentCls);
+
+    // load a new game
+    mainGameScreen();
+    resetAll();
+}
+
 
 
 //display start screen
@@ -95,6 +180,9 @@ function mainGameScreen(){
 function endGameScreen(){
     endScreen.style.display = 'flex';
     startScreen.style.display = 'none';
+    
+    // remove event listener from the reset btn
+    resetBtn.removeEventListener('click', resetFunction)
 }
 //
 
@@ -106,18 +194,18 @@ function playerOneChoice(player1){
     
 }
 
-
 // check the current condition of board
 function checkWin(currentCls){
     document.addEventListener('click',function winner(){ 
         // loop through the patterns
+
+        // CHANGE THIS CODE!!! 
         winPatterns.forEach(win=>{
             // detect player's win
             if(document.getElementById(win[0]).classList == currentCls && 
             document.getElementById(win[1]).classList == currentCls &&
             document.getElementById(win[2]).classList == currentCls){
                 console.log(currentCls, 'wins!!!');
-                gameActive = false;
                 document.removeEventListener('click', winner);
                 //stop responding to clicks 
                 grid.forEach(element=>{
@@ -130,21 +218,54 @@ function checkWin(currentCls){
     });
 }
 
+// function checkWin(currentCls){
+//     return winPatterns.some(pattern =>{
+//         return pattern.every(index=>{
+//             console.log(index);
+//             return grid[index].classList == currentCls;
+//         });
+//     });
+// }
+
+//add point to the winner
+function addPoint(winner){
+    if(winner == circleCls){
+        circlePoints ++;
+    }else if(winner == crossCls){
+        crossPoints ++;
+    }else{
+        console.log("Tie");
+    }
+    console.log("X - points: ", crossPoints);
+    console.log("O - points: ", circlePoints);
+
+}
+
 function displayEnd(currentCls){
     endGameScreen();
-
     // hide solo-game and tie screen messages
     soloEndScreen.forEach(element =>{
         element.style.display = 'none';
     });
     tieText.style.display = 'none';
     //display winner's symbol, number and color;
-    displayWinnerAndColor(currentCls);
+    
     //display multiplayer class elements
     multiplayerEndScreen.forEach(element=>{
         element.style.display = 'inline-flex';
-    })
-
+    });
+    // hide other elements
+    restartElements.forEach(element=>{
+        element.style.display = 'none';
+    });
+    multiplayerEndScreen.forEach(element =>{
+        element.style.display = 'inline-flex';
+    });
+    winnerText.style.display = 'block';
+    endBtns.forEach(button=>{
+        button.style.display = 'block';
+    });
+    displayWinnerAndColor(currentCls);
 }
 
 function displayWinnerAndColor(currentCls){
@@ -219,22 +340,7 @@ function showHoverState(box){
     //add hover state
 }
 
-//reset button
-const resetBtn = document.getElementById('restart-btn');
-resetBtn.addEventListener('click', resetAll);
-function resetAll(){
-    //reset everything
 
-    //add reset?  screen
-
-    const divs = document.querySelectorAll('#grid div');
-    divs.forEach(div=>{
-        // div.classList.remove(circleCls);
-        // div.classList.remove(crossCls);
-        // eventlistener stops working!!!
-    })
-    console.log(divs);
-}
 
 
 // load starting screen
