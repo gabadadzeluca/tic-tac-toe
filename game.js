@@ -143,6 +143,9 @@ function quit(){
     console.log("quit");
     startGameScreen();
     resetAll();
+    circlePoints = 0;
+    crossPoints = 0;
+    countTies = 0;
 }
 
 //next round button
@@ -182,7 +185,7 @@ function endGameScreen(){
     startScreen.style.display = 'none';
     
     // remove event listener from the reset btn
-    resetBtn.removeEventListener('click', resetFunction)
+    resetBtn.removeEventListener('click', resetFunction);
 }
 //
 
@@ -210,10 +213,12 @@ function checkWin(currentCls){
             });
             //display end screen
             displayEnd(currentCls);
+            addPoint(currentCls);
         }
     });
     
 }
+
 
 // function checkWin(currentCls){
 //     return winPatterns.some(pattern =>{
@@ -234,6 +239,7 @@ function addPoint(winner){
     }
     console.log("X - points: ", crossPoints);
     console.log("O - points: ", circlePoints);
+    //display points in divs
 
 }
 
@@ -289,6 +295,9 @@ function displayWinnerAndColor(currentCls){
 
 
 function startGame() {
+    // re-activate event Listener
+    resetBtn.addEventListener('click', resetFunction);
+
     // assign player1's turn and symbol
     if(playerOneChoice(player1) == circleCls){
         circleTurn = true;
