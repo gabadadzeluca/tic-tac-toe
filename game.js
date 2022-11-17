@@ -196,33 +196,29 @@ function playerOneChoice(player1){
 
 // check the current condition of board
 function checkWin(currentCls){
-    document.addEventListener('click',function winner(){ 
-        // loop through the patterns
+    // loop through the patterns
 
-        // CHANGE THIS CODE!!! 
-        winPatterns.forEach(win=>{
-            // detect player's win
-            if(document.getElementById(win[0]).classList == currentCls && 
-            document.getElementById(win[1]).classList == currentCls &&
-            document.getElementById(win[2]).classList == currentCls){
-                console.log(currentCls, 'wins!!!');
-                document.removeEventListener('click', winner);
-                //stop responding to clicks 
-                grid.forEach(element=>{
-                    element.removeEventListener('click', handeClick);
-                });
-                //display end screen
-                displayEnd(currentCls);
-            }
-        });
+    winPatterns.forEach(win=>{
+        // detect player's win
+        if(document.getElementById(win[0]).classList == currentCls && 
+        document.getElementById(win[1]).classList == currentCls &&
+        document.getElementById(win[2]).classList == currentCls){
+            console.log(currentCls, 'wins!!!');
+            //stop responding to clicks 
+            grid.forEach(element=>{
+                element.removeEventListener('click', handeClick);
+            });
+            //display end screen
+            displayEnd(currentCls);
+        }
     });
+    
 }
 
 // function checkWin(currentCls){
 //     return winPatterns.some(pattern =>{
 //         return pattern.every(index=>{
 //             console.log(index);
-//             return grid[index].classList == currentCls;
 //         });
 //     });
 // }
