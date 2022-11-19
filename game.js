@@ -77,6 +77,8 @@ const soloEndScreen = Array.from(document.querySelectorAll('.solo'));
 //tie game end-text
 const tieText = document.getElementById('text-tie');
 
+//winner class elements
+const winnerElements = document.querySelectorAll('.winner');
 // winner symbol
 const winnerSymbol = document.getElementById('winner-symbol');
 // winner number
@@ -222,11 +224,12 @@ function checkWin(currentCls){
             grid.forEach(element=>{
                 element.removeEventListener('click', handeClick);
             });
+            winner = true;
             //display end screen
-            displayEnd(currentCls);
+            displayEnd(currentCls, winner);
             addPoint(currentCls);
             showScore(currentCls);
-            return winner = true;
+            return winner;
         }
     });
     
@@ -236,7 +239,7 @@ function checkWin(currentCls){
 function checkTie(currentCls){
     if(! checkWin(currentCls)){
         console.log("it's a tie");
-
+        displayEnd(currentCls, false);
     }
 }
 
@@ -273,31 +276,46 @@ function showScore(winner){
 
 }
 
-function displayEnd(currentCls){
+function displayEnd(currentCls ,win){
     endGameScreen();
-    // hide solo-game and tie screen messages
+
+    if(win){
+        // hide other elements
+        restartElements.forEach(element=>{
+            element.style.display = 'none';
+        });
+        multiplayerEndScreen.forEach(element =>{
+            element.style.display = 'inline-flex';
+        });
+        winnerText.style.display = 'block';    
+            
+        //display multiplayer class elements
+        multiplayerEndScreen.forEach(element=>{
+            element.style.display = 'inline-flex';
+        });
+        //display winner's symbol, number and color;
+        displayWinnerAndColor(currentCls);
+         // hide tie message
+        tieText.style.display = 'none';
+    }else{
+        //display tie and hide winner messages
+        tieText.style.display = 'block';
+        winnerElements.forEach(element=>{
+            element.style.display = 'none';
+        });
+        multiplayerEndScreen.forEach(element =>{
+            element.style.display = 'none';
+        });
+    }
+    // hide solo-game message
     soloEndScreen.forEach(element =>{
         element.style.display = 'none';
     });
-    tieText.style.display = 'none';
-    //display winner's symbol, number and color;
-    
-    //display multiplayer class elements
-    multiplayerEndScreen.forEach(element=>{
-        element.style.display = 'inline-flex';
-    });
-    // hide other elements
-    restartElements.forEach(element=>{
-        element.style.display = 'none';
-    });
-    multiplayerEndScreen.forEach(element =>{
-        element.style.display = 'inline-flex';
-    });
-    winnerText.style.display = 'block';
+
     endBtns.forEach(button=>{
         button.style.display = 'block';
     });
-    displayWinnerAndColor(currentCls);
+
 }
 
 function displayWinnerAndColor(currentCls){
