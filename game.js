@@ -51,7 +51,17 @@ playerBtn.addEventListener('click', ()=>{
 //grid element
 const gameScreen = document.querySelector('#game-board');
 
-
+// scores divs
+const blueBox = document.querySelector('.blue-box');
+const tieBox = document.querySelector('.silver-box');
+const orangeBox = document.querySelector('.orange-box');
+//access elements to display score
+const blueScore = document.getElementById('blue-score');
+const orangeScore = document.getElementById('orange-score');
+// access p tags in the boxes
+const iconBlueBox = document.getElementById('icon-player');
+const iconOrangeBox = document.getElementById('icon-other');
+const ties = document.getElementById('ties');
 ///end screen elements///
 
 // ending screen element
@@ -86,14 +96,12 @@ resetBtn.addEventListener('click', resetFunction);
 // Yes restart and No don't buttons
 // No, cancel btn
 const noBtn = document.querySelector('.cancel');
-console.log(noBtn);
 noBtn.addEventListener('click', ()=>{
     mainGameScreen();
 })
 
 // Yes, cancel btn
 const yesBtn = document.querySelector('.cont');
-console.log(yesBtn);
 // remove score/ menu and clear grid
 yesBtn.addEventListener('click', ()=>{
     resetAll();
@@ -146,6 +154,10 @@ function quit(){
     circlePoints = 0;
     crossPoints = 0;
     countTies = 0;
+
+    blueScore.innerHTML = 0;
+    ties.innerHTML = 0;
+    orangeScore.innerHTML = 0;
 }
 
 //next round button
@@ -153,8 +165,6 @@ const nextRoundBtn = document.querySelector('.next-rd');
 nextRoundBtn.addEventListener('click', nextRound);
 function nextRound(){
     console.log("Next Round");
-    //add points to the winner if there's one
-    // addPoint(currentCls);
 
     // load a new game
     mainGameScreen();
@@ -197,6 +207,7 @@ function playerOneChoice(player1){
     
 }
 
+let winner;
 // check the current condition of board
 function checkWin(currentCls){
     // loop through the patterns
@@ -214,19 +225,20 @@ function checkWin(currentCls){
             //display end screen
             displayEnd(currentCls);
             addPoint(currentCls);
+            showScore(currentCls);
+            return winner = true;
         }
     });
     
 }
 
+//check tie
+function checkTie(currentCls){
+    if(! checkWin(currentCls)){
+        console.log("it's a tie");
 
-// function checkWin(currentCls){
-//     return winPatterns.some(pattern =>{
-//         return pattern.every(index=>{
-//             console.log(index);
-//         });
-//     });
-// }
+    }
+}
 
 //add point to the winner
 function addPoint(winner){
@@ -235,11 +247,29 @@ function addPoint(winner){
     }else if(winner == crossCls){
         crossPoints ++;
     }else{
-        console.log("Tie");
+        countTies ++;
+        console.log("Ties :", countTies);
     }
-    console.log("X - points: ", crossPoints);
-    console.log("O - points: ", circlePoints);
-    //display points in divs
+}
+function showScore(winner){
+
+    ties.innerHTML = countTies;
+    // display players' boxes acording to their icons
+    if(playerOneChoice(player1) == circleCls){
+        blueBox.style.backgroundColor = 'var(--light-yellow)';
+        orangeBox.style.backgroundColor = 'var(--light-blue)';
+        iconBlueBox.innerHTML = '0 (P1)';
+        iconOrangeBox.innerHTML = 'X (P2)';
+        blueScore.innerHTML = circlePoints;
+        orangeScore.innerHTML = crossPoints;
+    }else{
+        blueBox.style.backgroundColor = 'var(--light-blue)';
+        orangeBox.style.backgroundColor = 'var(--light-yellow)';
+        iconBlueBox.innerHTML = 'X (P1)';
+        iconOrangeBox.innerHTML = 'O (P2)'
+        orangeScore.innerHTML = circleCls;
+        blueScore.innerHTML = crossPoints;
+    }
 
 }
 
@@ -295,6 +325,7 @@ function displayWinnerAndColor(currentCls){
 
 
 function startGame() {
+    count = 0;
     // re-activate event Listener
     resetBtn.addEventListener('click', resetFunction);
 
@@ -304,19 +335,24 @@ function startGame() {
     }else{
         circleTurn = false;
     }
-
     grid.forEach(element =>{
         element.addEventListener('click', handeClick, {once: true});
     });
 }
 
+let count = 0;
 function handeClick(e) {
+    count ++;
     const box = e.target;
     const currentCls = circleTurn  ? circleCls : crossCls; 
     placeMark(box,currentCls);
     checkWin(currentCls);
     showTurn(circleTurn); // show whose turn it is
     // showHoverState();
+    console.log(count);
+    if(count == 9){
+        checkTie(currentCls);
+    }
 }
 
 
