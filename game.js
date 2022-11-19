@@ -240,6 +240,8 @@ function checkTie(currentCls){
     if(! checkWin(currentCls)){
         console.log("it's a tie");
         displayEnd(currentCls, false);
+        addPoint(false);
+        showScore(currentCls);
     }
 }
 
@@ -366,7 +368,7 @@ function handeClick(e) {
     placeMark(box,currentCls);
     checkWin(currentCls);
     showTurn(circleTurn); // show whose turn it is
-    // showHoverState();
+    showHoverState(box);
     console.log(count);
     if(count == 9){
         checkTie(currentCls);
@@ -398,7 +400,6 @@ function showTurn(circleTurn) {
 function showHoverState(box){
     //add hover state
 }
-
 
 
 
