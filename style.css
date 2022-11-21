@@ -170,7 +170,7 @@ body * {
   border: none;
   box-shadow: inset 0px -4px 0px #6B8997;
 }
-#game-board #grid {
+#game-board .grid {
   margin-top: 6.4rem;
   display: grid;
   grid-template-columns: repeat(3, 9.6rem);
@@ -179,7 +179,7 @@ body * {
   -moz-column-gap: 2rem;
        column-gap: 2rem;
 }
-#game-board #grid div {
+#game-board .grid div {
   width: 9.6rem;
   height: 9.6rem;
   background-color: var(--semi-dark-navy);
@@ -187,20 +187,19 @@ body * {
   box-shadow: inset 0rem -0.8rem 0rem #10212A;
   background-size: 4rem;
 }
-#game-board #grid .circle-hover {
-  background-image: url("assets/icon-o-outline.svg");
+#game-board .grid div:hover {
+  cursor: pointer;
+  background-position: center;
+  background-repeat: no-repeat;
 }
-#game-board #grid .cross-hover {
-  background-image: url("assets/icon-o-outline.svg");
-}
-#game-board #grid .circle, #game-board #grid .cross, #game-board #grid .circle-hover, #game-board #grid .cross-hover {
+#game-board .grid .circle, #game-board .grid .cross, #game-board .grid .circle-hover, #game-board .grid .cross-hover {
   background-repeat: no-repeat;
   background-position: center;
 }
-#game-board #grid .circle {
+#game-board .grid .circle {
   background-image: url("assets/icon-o.svg");
 }
-#game-board #grid .cross {
+#game-board .grid .cross {
   background-image: url("assets/icon-x.svg");
 }
 #game-board .scores {
@@ -211,10 +210,16 @@ body * {
   -moz-column-gap: 2rem;
        column-gap: 2rem;
 }
+#game-board .scores * {
+  padding: 0;
+}
 #game-board .scores div {
   width: 9.6rem;
   height: 6.4rem;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
   border-radius: 1rem;
   font-size: 1.4rem;
   font-weight: var(--medium);
@@ -228,9 +233,24 @@ body * {
 #game-board .scores .orange-box {
   background-color: var(--light-yellow);
 }
-#game-board .scores #x-score, #game-board .scores #tries, #game-board .scores #o-score {
+#game-board .scores #blue-score, #game-board .scores #ties, #game-board .scores #orange-score {
   font-size: 2rem;
   font-weight: var(--bold);
+  padding: 0;
+  margin: 0;
+  margin-bottom: 1.1rem;
+}
+
+.circle-hover div:hover {
+  background-image: url("assets/icon-o-outline.svg");
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.cross-hover div:hover {
+  background-image: url("assets/icon-x-outline.svg");
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 #end-text {
@@ -293,6 +313,15 @@ body * {
   -moz-column-gap: 1.6rem;
        column-gap: 1.6rem;
 }
+#end-text #end-box .restart {
+  display: block;
+}
+#end-text #end-box p {
+  color: var(--silver);
+  font-weight: var(--bold);
+  font-size: 2.4rem;
+  letter-spacing: 0.15rem;
+}
 #end-text #end-box .multiplayer, #end-text #end-box .restart {
   display: none;
 }
@@ -308,10 +337,4 @@ body * {
   color: var(--silver);
   font-size: 1.4rem;
   font-weight: var(--bold);
-}
-#end-text #end-box #text-tie {
-  color: var(--silver);
-  font-size: 2.4rem;
-  font-weight: var(--bold);
-  letter-spacing: 0.15rem;
 }/*# sourceMappingURL=style.css.map */

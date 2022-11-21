@@ -26,7 +26,9 @@ console.log("player1: ", player1.classList[0]);
 
 const restartElements = document.querySelectorAll('.restart');
 
-const grid = document.querySelector('#grid').childNodes;
+// board
+const board = document.querySelector('.grid');
+const grid = board.childNodes;
 
 
 
@@ -139,7 +141,7 @@ function restartGameScreen(){
 function resetAll(){
     //reset everything
 
-    const divs = document.querySelectorAll('#grid div');
+    const divs = document.querySelectorAll('.grid div');
     divs.forEach(div=>{
         div.classList.remove(circleCls);
         div.classList.remove(crossCls);
@@ -205,6 +207,9 @@ function endGameScreen(){
 function playerOneChoice(player1){
     // circle or cross?
     let playerOne = player1.id.slice(7);
+
+    // assign hover-state class to the board
+    board.classList.add(`${playerOne}-hover`);
     return playerOne;
     
 }
@@ -220,16 +225,16 @@ function checkWin(currentCls){
         document.getElementById(win[1]).classList == currentCls &&
         document.getElementById(win[2]).classList == currentCls){
             console.log(currentCls, 'wins!!!');
-            //stop responding to clicks 
-            grid.forEach(element=>{
-                element.removeEventListener('click', handeClick);
-            });
             winner = true;
             //display end screen
             displayEnd(currentCls, winner);
             addPoint(currentCls);
             showScore(currentCls);
-            return winner;
+            //stop responding to clicks 
+            grid.forEach(element=>{
+                element.removeEventListener('click', handeClick);
+            });
+            return winner = true;
         }
     });
     
@@ -289,7 +294,7 @@ function displayEnd(currentCls ,win){
         multiplayerEndScreen.forEach(element =>{
             element.style.display = 'inline-flex';
         });
-        winnerText.style.display = 'block';    
+        winnerText.style.display = 'inline-flex';    
             
         //display multiplayer class elements
         multiplayerEndScreen.forEach(element=>{
@@ -368,8 +373,7 @@ function handeClick(e) {
     placeMark(box,currentCls);
     checkWin(currentCls);
     showTurn(circleTurn); // show whose turn it is
-    showHoverState(box);
-    console.log(count);
+    showHoverState();
     if(count == 9){
         checkTie(currentCls);
     }
@@ -397,11 +401,16 @@ function showTurn(circleTurn) {
     turn.src = `assets/icon-${src}.svg`;
 }
 
-function showHoverState(box){
-    //add hover state
+
+function showHoverState(){
+    if(circleTurn){
+        board.classList.remove('cross-hover');
+        board.classList.add('circle-hover');
+    }else{
+        board.classList.remove('circle-hover');
+        board.classList.add('cross-hover');
+    }
 }
-
-
 
 // load starting screen
 startGameScreen();
@@ -419,7 +428,6 @@ function game(x){
         //load player vs player game
         // multiplayerGame();
         
-        //choose player one's mark
         startGame();
     }
 }
