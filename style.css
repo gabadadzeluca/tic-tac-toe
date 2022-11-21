@@ -192,7 +192,27 @@ body * {
   background-position: center;
   background-repeat: no-repeat;
 }
-#game-board .grid .circle, #game-board .grid .cross, #game-board .grid .circle-hover, #game-board .grid .cross-hover {
+#game-board .grid .winner-circle, #game-board .grid .winner-cross {
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 4rem;
+}
+#game-board .grid .winner-circle {
+  background: var(--light-yellow);
+  background-image: url("assets/icon-o.svg");
+  background-position: center;
+  background-size: 4rem;
+  background-repeat: no-repeat;
+  background-blend-mode: difference;
+}
+#game-board .grid .winner-cross {
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: var(--light-blue);
+  background-image: url("assets/icon-x.svg");
+  background-blend-mode: difference;
+}
+#game-board .grid .circle, #game-board .grid .cross {
   background-repeat: no-repeat;
   background-position: center;
 }

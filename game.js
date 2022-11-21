@@ -145,8 +145,10 @@ function resetAll(){
     divs.forEach(div=>{
         div.classList.remove(circleCls);
         div.classList.remove(crossCls);
-        startGame();
+        div.classList.remove('winner-circle');
+        div.classList.remove('winner-cross');
     });
+    startGame();
 }
 //quit btn
 const quitBtn = document.querySelector('.quit');
@@ -221,9 +223,14 @@ function checkWin(currentCls){
         document.getElementById(win[1]).classList == currentCls &&
         document.getElementById(win[2]).classList == currentCls){
             console.log(currentCls, 'wins!!!');
-            winner = true;
+
+            // display the winner's combination
+            displayWinnerCombination(document.getElementById(win[0]),currentCls);
+            displayWinnerCombination(document.getElementById(win[1]),currentCls);
+            displayWinnerCombination(document.getElementById(win[2]),currentCls);
+
             //display end screen
-            displayEnd(currentCls, winner);
+            displayEnd(currentCls, true);
             addPoint(currentCls);
             showScore(currentCls);
             //stop responding to clicks 
@@ -233,7 +240,18 @@ function checkWin(currentCls){
             return winner = true;
         }
     });
-    
+}
+
+function displayWinnerCombination(item,currentCls){
+    let winner;
+    if(currentCls == circleCls){
+        winner = 'winner-circle'; 
+    }else{
+        winner = 'winner-cross';
+    }
+    item.classList.add(winner);
+    item.classList.remove(currentCls);
+
 }
 
 //check tie
@@ -358,17 +376,21 @@ function startGame() {
     }
     console.log('player One: ', playerOneChoice(player1));
 
-    //set player1's icon to hover state
+    setHoverStart();
+    // add event listener
+    grid.forEach(element =>{
+        element.addEventListener('click', handeClick, {once: true});
+    });
+}
+
+//set player1's icon to hover state
+function setHoverStart(){
     board.classList.add(`${playerOneChoice(player1)}-hover`);
     //remove classnames that aren't needed
     board.classList.forEach(className=>{
         if(className != 'grid' && className != `${playerOneChoice(player1)}-hover`){
             board.classList.remove(className);
         }
-    })
-    // add event listener
-    grid.forEach(element =>{
-        element.addEventListener('click', handeClick, {once: true});
     });
 }
 
