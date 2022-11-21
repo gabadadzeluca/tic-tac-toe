@@ -207,11 +207,7 @@ function endGameScreen(){
 function playerOneChoice(player1){
     // circle or cross?
     let playerOne = player1.id.slice(7);
-
-    // assign hover-state class to the board
-    board.classList.add(`${playerOne}-hover`);
     return playerOne;
-    
 }
 
 let winner;
@@ -360,6 +356,17 @@ function startGame() {
     }else{
         circleTurn = false;
     }
+    console.log('player One: ', playerOneChoice(player1));
+
+    //set player1's icon to hover state
+    board.classList.add(`${playerOneChoice(player1)}-hover`);
+    //remove classnames that aren't needed
+    board.classList.forEach(className=>{
+        if(className != 'grid' && className != `${playerOneChoice(player1)}-hover`){
+            board.classList.remove(className);
+        }
+    })
+    // add event listener
     grid.forEach(element =>{
         element.addEventListener('click', handeClick, {once: true});
     });
@@ -404,6 +411,7 @@ function showTurn(circleTurn) {
 
 function showHoverState(){
     if(circleTurn){
+        console.log("circleTurn: ",circleTurn);
         board.classList.remove('cross-hover');
         board.classList.add('circle-hover');
     }else{
