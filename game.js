@@ -191,17 +191,25 @@ function handeClick(e){
     const box = e.target;
     placeMark(box, currentCls);
     if(checkWin(currentCls)){
-        console.log("winner", currentCls);
         displayWinner(currentCls);
+        // stop responding to clicks
         grid.forEach(box=>{
             box.removeEventListener('click', handeClick);
         });
         outline(currentCls);
-        
+    }else if(isDraw()){
+        console.log('draw');
     }
     showTurn(circleTurn);
     showHoverState(); // !!!doesn't show correctly on the first turn if p1 is cross;
 }
+
+function isDraw(){
+    return [...grid].every(box=>{
+        return box.classList.contains(circleCls) || box.classList.contains(crossCls);
+    });
+}
+
 
 function placeMark(box, currentCls){
     box.classList.add(currentCls);
@@ -220,6 +228,7 @@ function switchTurn(){
     circleTurn = !circleTurn;
 }
 
+// display hover state
 function showHoverState(){
     if(circleTurn){
         board.classList.remove('cross-hover');
@@ -229,7 +238,7 @@ function showHoverState(){
         board.classList.add('cross-hover');
     }
 }
-// add p1's icon to hover
+// add p1's icon to hover (at the start or restart)
 function setHoverStart(){
     board.classList.add(`${getPlayer()}-hover`);
     board.classList.forEach(className=>{
