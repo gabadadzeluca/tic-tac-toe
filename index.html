@@ -11,15 +11,17 @@
 <body>
 
   <!-- New game menu start -->
-  <div id="start-board">
+  <div id="start-board" class="start-board">
     <img src="assets/logo.svg" alt="logo" class="logo">
     <div id="choice">
       <!--CHOOSE X OR O img-->
       <p class="white">Pick player 1's mark</p>
       <div id="p1-choice">
-        <!-- add svgs instead of imgs -->
-        <img src="assets/icon-x.svg" alt="X" class="x choice" id="player-cross">
-        <img src="assets/icon-o.svg" alt="O" class=" o player-1 choice" id="player-circle">
+        
+        <!-- <img src="assets/icon-x.svg" alt="X" class="x choice" id="player-cross">
+        <img src="assets/icon-o.svg" alt="O" class=" o player-1 choice" id="player-circle"> -->
+        <div class="x" id="player-cross"></div>
+        <div class="o player-1" id="player-circle"></div>
       </div>
       
       <p class="grey">Remember: X goes first</p>
@@ -42,7 +44,7 @@
       <p id="turn-box"><img src="assets/icon-x.svg" id="turn">turn</p>
       <button id="restart-btn"></button>
     </div>
-    <div id="grid">
+    <div class="grid circle-hover" id="grid">
       <div id="1"></div>
       <div id="2"></div>
       <div id="3"></div>
@@ -71,36 +73,34 @@
        
 
     </div>
-   
-    <div id="end-text">
-      <div id="end-box">
-
-          <p id="text-lose" class="solo">Oh no, you lost</p>
-          <p id="text-win" class="solo">You won!</p>
-
-          <p class="multiplayer winner">Player <span id="winner-num"></span>wins!</p>
-
-          <h4 id="winner-text">
-            <!-- <img src="assets/icon-x.svg" alt="X" class="symbol"> -->
-            <!-- <img src="assets/icon-o.svg" alt="O" class="symbol"> -->
-            <img src="" alt="" id="winner-symbol">
-            takes the round
-          </h4>
-          <p id="text-tie">Round tied</p>
-          
-          <p class="restart" id="restart-question">Restart game?</p>
-          <div class="buttons-end">
-            <button class="end-btn quit">Quit</button>
-            <button class="end-btn next-rd">Next round</button>
-            <button class="restart cancel">No, cancel</button>
-            <button class="restart cont">Yes, restart</button>
-          </div>
-      </div>
-    </div>
-
   </div>
   <!-- Game board end -->
 
+  <div id="end-screen" class="end-screen">
+    <div id="end-box">
+
+        <p id="text-lose" class="solo">Oh no, you lost</p>
+        <p id="text-win" class="solo">You won!</p>
+
+        <p class="multiplayer winner">Player <span id="winner-num"></span>wins!</p>
+
+        <h4 id="winner-text" class="winner">
+          <!-- <img src="assets/icon-x.svg" alt="X" class="symbol"> -->
+          <!-- <img src="assets/icon-o.svg" alt="O" class="symbol"> -->
+          <img src="" alt="" id="winner-symbol">
+          takes the round
+        </h4>
+        <p id="text-tie">Round tied</p>
+        
+        <p class="restart" id="restart-question">Restart game?</p>
+        <div class="buttons-end">
+          <button class="end-btn quit">Quit</button>
+          <button class="end-btn next-rd">Next round</button>
+          <button class="restart cancel">No, cancel</button>
+          <button class="restart cont">Yes, restart</button>
+        </div>
+    </div>
+  </div>
 </body>
 <script src="game.js"></script>
 </html>
