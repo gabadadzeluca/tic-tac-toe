@@ -72,11 +72,15 @@ const endScreen = document.getElementById('end-screen');
 const cpu = document.getElementById('cpu-btn');
 const multiplayer = document.getElementById('player-btn');
 
+let x;
 cpu.addEventListener('click', ()=>{
     startGame('cpu');
+    x = 'cpu';
+
 });
 multiplayer.addEventListener('click', ()=>{
     startGame('multiplayer');
+    x = 'multplayer';
 });
 
 
@@ -115,8 +119,7 @@ function restartScreen(){
     });
     yesBtn.addEventListener('click', ()=>{
         resetBoard();
-        startGame();
-        //DISPLAY CORRECT ICONS! 
+        startGame(x);
     });
 
     hide(tieText);
@@ -126,7 +129,7 @@ function restartScreen(){
 function nextRound(){
     resetBoard();
     hide(endScreen);
-    startGame();
+    startGame(x);
 }
 
 function quit(){
@@ -197,6 +200,9 @@ function startGame(x){
     });
     // get player one and let them start.
     getPlayer() == circleCls ? circleTurn = true : circleTurn = false;
+
+    // if gamemode is cpu
+
 }
 
 // get player 1's symbol
@@ -243,24 +249,26 @@ function addPoint(currentCls){
 }
 
 function styleDivs(x){
-    if(x !== 'cpu'){
+    let colorP1 = getPlayer() == circleCls ? 'var(--light-yellow)' : 'var(--light-blue)';
+    let colorP2 = getPlayer() == circleCls ? 'var(--light-blue)' : 'var(--light-yellow)';
+    let nameP1 = getPlayer() == circleCls ? 'O (P1)' : 'X (P1)';
+    let nameP2 = getPlayer() == circleCls ? 'X (P2)' : 'O (P2)';
+
+    blueBox.style.backgroundColor = colorP1;
+    orangeBox.style.backgroundColor = colorP2;
+
+    if(x != 'cpu'){
+        iconBlueBox.innerHTML = nameP1;
+        iconOrangeBox.innerHTML = nameP2;
         if(getPlayer() == circleCls){
-            blueBox.style.backgroundColor = 'var(--light-yellow)';
-            orangeBox.style.backgroundColor = 'var(--light-blue)';
-            iconBlueBox.innerHTML = '0 (P1)';
-            iconOrangeBox.innerHTML = 'X (P2)';
             blueScore.innerHTML = circlePoints;
             orangeScore.innerHTML = crossPoints;
         }else{
-            blueBox.style.backgroundColor = 'var(--light-blue)';
-            orangeBox.style.backgroundColor = 'var(--light-yellow)';
-            iconBlueBox.innerHTML = 'X (P1)';
-            iconOrangeBox.innerHTML = 'O (P2)'
             orangeScore.innerHTML = circlePoints;
             blueScore.innerHTML = crossPoints;
         }
-        ties.innerHTML = countTies;
-    }// add else statements
+    }
+    ties.innerHTML = countTies;
 }
 
 function isDraw(){
