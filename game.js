@@ -25,6 +25,18 @@ const grid = document.querySelectorAll('#grid div');
 //board element 
 const board = document.getElementById('grid');
 
+// scores divs
+const blueBox = document.querySelector('.blue-box');
+const tieBox = document.querySelector('.silver-box');
+const orangeBox = document.querySelector('.orange-box');
+//access elements to display score
+const blueScore = document.getElementById('blue-score');
+const orangeScore = document.getElementById('orange-score');
+// access p tags in the boxes
+const iconBlueBox = document.getElementById('icon-player');
+const iconOrangeBox = document.getElementById('icon-other');
+const ties = document.getElementById('ties');
+
 //restart class elements
 const restartElements = document.querySelectorAll('.restart');
 // multiplayer class elements 
@@ -47,7 +59,6 @@ const tieText = document.getElementById('text-tie');
 const endButtons = document.querySelectorAll('.end-btn');
 // restart buttons
 const restartButtons = document.querySelectorAll('.buttons-end .restart');
-console.log(restartButtons);
 // starting screen
 const startScreen = document.getElementById('start-board');
 
@@ -77,11 +88,9 @@ const nextRoundBtn = document.querySelector('.next-rd');
 nextRoundBtn.addEventListener('click', nextRound);
 
 const restartBtn = document.getElementById('restart-btn');
-restartBtn.addEventListener('click', restartGame);
 
 function restartGame(){
     restartScreen();
-    // startGame();
 }
 
 // restart game
@@ -94,7 +103,7 @@ function restartScreen(){
     restartButtons.forEach(button=>{
         show(button, 'block');
     });
-    [multiplayerElements,soloElements, winnerElements, endButtons].map(array=>{
+    [multiplayerElements,soloElements, winnerElements, endButtons].forEach(array=>{
         array.forEach(element=>{
             hide(element);
         });
@@ -123,6 +132,14 @@ function nextRound(){
 function quit(){
     showStartMenu();
     resetBoard();
+    resetScores();
+}
+
+//reset scores
+function resetScores(){
+    circlePoints = 0;
+    crossPoints = 0;
+    countTies = 0;
 }
 
 // clear board
@@ -172,6 +189,7 @@ function messageScreen(){
 // start game
 showStartMenu();
 function startGame(x){
+    styleDivs(x);
     showGameScreen();
     setHoverStart();
     grid.forEach(box=>{
@@ -187,10 +205,14 @@ function getPlayer(){
     return playerOne.id.slice(7);
 }
 function handeClick(e){
+    // re-enable restart button
+    restartBtn.addEventListener('click', restartGame);
     const currentCls = circleTurn  ? circleCls : crossCls; 
     const box = e.target;
     placeMark(box, currentCls);
     if(checkWin(currentCls)){
+        // add points to the winner
+        addPoint(currentCls);
         displayWinner(currentCls);
         // stop responding to clicks
         grid.forEach(box=>{
@@ -199,9 +221,46 @@ function handeClick(e){
         outline(currentCls);
     }else if(isDraw()){
         console.log('draw');
+        displayDraw();
+        // add points to the draw score
+        addPoint(false);
     }
     showTurn(circleTurn);
     showHoverState(); // !!!doesn't show correctly on the first turn if p1 is cross;
+}
+
+function addPoint(currentCls){
+    if(!currentCls){
+        // add points to the draw
+        countTies ++;
+    }else{
+        // add point to the winner
+        currentCls == circleCls ? circlePoints ++ : crossPoints ++;
+    }
+    console.log("circle:", circlePoints);
+    console.log("cross:", crossPoints);
+    console.log("tie:", countTies);
+}
+
+function styleDivs(x){
+    if(x !== 'cpu'){
+        if(getPlayer() == circleCls){
+            blueBox.style.backgroundColor = 'var(--light-yellow)';
+            orangeBox.style.backgroundColor = 'var(--light-blue)';
+            iconBlueBox.innerHTML = '0 (P1)';
+            iconOrangeBox.innerHTML = 'X (P2)';
+            blueScore.innerHTML = circlePoints;
+            orangeScore.innerHTML = crossPoints;
+        }else{
+            blueBox.style.backgroundColor = 'var(--light-blue)';
+            orangeBox.style.backgroundColor = 'var(--light-yellow)';
+            iconBlueBox.innerHTML = 'X (P1)';
+            iconOrangeBox.innerHTML = 'O (P2)'
+            orangeScore.innerHTML = circlePoints;
+            blueScore.innerHTML = crossPoints;
+        }
+        ties.innerHTML = countTies;
+    }// add else statements
 }
 
 function isDraw(){
@@ -209,7 +268,6 @@ function isDraw(){
         return box.classList.contains(circleCls) || box.classList.contains(crossCls);
     });
 }
-
 
 function placeMark(box, currentCls){
     box.classList.add(currentCls);
@@ -277,6 +335,9 @@ function displayWinner(currentCls){
     //hide tie text
     hide(tieText);
     displayColorAndSymbol(currentCls);
+
+    // disable reset btn
+    restartBtn.removeEventListener('click', restartGame);
 }
 
 // display winner's color and icon
@@ -286,6 +347,22 @@ function displayColorAndSymbol(currentCls){
     winnerSymbol.src = `assets/icon-${url}.svg`;
     winnerText.style.color = color;
 }   
+
+// draw screen
+function displayDraw(){
+    messageScreen();
+    [winnerElements, soloElements, restartElements].forEach(array=>{
+        array.forEach(element=>{
+            hide(element);
+        });
+    });
+    show(tieText, 'block');
+    endButtons.forEach(button=>{
+        show(button, "block");
+    });
+    // disable reset btn
+    restartBtn.removeEventListener('click', restartGame);
+}
 
 
 // hide element
