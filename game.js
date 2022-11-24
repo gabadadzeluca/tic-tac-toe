@@ -72,15 +72,15 @@ const endScreen = document.getElementById('end-screen');
 const cpu = document.getElementById('cpu-btn');
 const multiplayer = document.getElementById('player-btn');
 
-let x;
+let gamemode;
 cpu.addEventListener('click', ()=>{
     startGame('cpu');
-    x = 'cpu';
+    gamemode = 'cpu';
 
 });
 multiplayer.addEventListener('click', ()=>{
     startGame('multiplayer');
-    x = 'multplayer';
+    gamemode = 'multiplayer';
 });
 
 
@@ -119,7 +119,7 @@ function restartScreen(){
     });
     yesBtn.addEventListener('click', ()=>{
         resetBoard();
-        startGame(x);
+        startGame(gamemode);
     });
     hide(tieText);
 }
@@ -128,7 +128,7 @@ function restartScreen(){
 function nextRound(){
     resetBoard();
     hide(endScreen);
-    startGame(x);
+    startGame(gamemode);
 }
 
 function quit(){
@@ -190,17 +190,15 @@ function messageScreen(){
 
 // start game
 showStartMenu();
-function startGame(x){
-    styleDivs(x);
+function startGame(gamemode){
+    styleDivs(gamemode);
     showGameScreen();
-    setHoverStart();
+    setHoverStart(gamemode);
     grid.forEach(box=>{
-        box.addEventListener('click', handeClick, {once:true});
+        box.addEventListener('click', handleClick, {once:true});
     });
     circleTurn = false;
-
-    // if gamemode is cpu
-
+    // if gamemode is cpu load cpu game
 }
 
 // get player 1's symbol
@@ -208,30 +206,81 @@ function getPlayer(){
     const playerOne = document.querySelector('.player-1');
     return playerOne.id.slice(7);
 }
-function handeClick(e){
+function handleClick(e){
     // re-enable restart button
     restartBtn.addEventListener('click', restartGame);
     const currentCls = circleTurn  ? circleCls : crossCls; 
     const box = e.target;
-    placeMark(box, currentCls);
-    if(checkWin(currentCls)){
-        // add points to the winner
-        addPoint(currentCls);
-        displayWinner(currentCls);
-        // stop responding to clicks
-        grid.forEach(box=>{
-            box.removeEventListener('click', handeClick);
-        });
-        outline(currentCls);
-    }else if(isDraw()){
-        console.log('draw');
-        displayDraw();
-        // add points to the draw score
-        addPoint(false);
+    console.log(gamemode);
+    if(gamemode != 'cpu'){
+        
+        placeMark(box, currentCls);
+        if(checkWin(currentCls)){
+            // add points to the winner
+            addPoint(currentCls);
+            displayWinner(currentCls);
+            // stop responding to clicks
+            grid.forEach(box=>{
+                box.removeEventListener('click', handleClick);
+            });
+            outline(currentCls);
+        }else if(isDraw()){
+            console.log('draw');
+            displayDraw();
+            // add points to the draw score
+            addPoint(false);
+        }
+        showTurn(circleTurn);
+        showHoverState(); // modify for cpu game
+    }else if(gamemode == 'cpu'){
+        const aiCls = getPlayer() == circleCls ? crossCls : circleCls;
+        aiGame(aiCls);
+        placeMark(box, getPlayer());
+        aiMove(aiCls);
+        showHoverState(gamemode);
+        if(checkWin(aiCls)){
+            console.log('ai wins');
+        }else if(checkWin(getPlayer())){
+            console.log(getPlayer(), "wins");
+        }
+        // change winner check logic in this case
+        
     }
-    showTurn(circleTurn);
-    showHoverState();
 }
+
+function aiMove(aiCls){
+    if(aiCls == crossCls){
+        availableSpot(aiCls);
+    }else if(aiCls == circleCls){
+        availableSpot(aiCls);
+    }
+
+}
+
+
+// return an available grid-box from the array
+function availableSpot(aiCls){
+    available = [];
+    grid.forEach(element =>{
+        if(element.classList != circleCls && element.classList != crossCls){
+            available.push(element);
+        }
+    });
+    console.log(available);
+    // add symbol to a random box
+    let box = available[Math.floor(Math.random() * (available.length - 1))];
+    if(box){
+        box.classList.add(aiCls);
+    }else{
+        console.log("no available places");
+    }
+}
+function aiGame(aiCls){
+    console.log("aiClass: ", aiCls);
+    circleTurn = false;
+}
+
+
 
 function addPoint(currentCls){
     if(!currentCls){
@@ -293,7 +342,7 @@ function switchTurn(){
 }
 
 // display hover state
-function showHoverState(){
+function showHoverState(gamemode){
     if(circleTurn){
         board.classList.remove('cross-hover');
         board.classList.add('circle-hover');
@@ -301,16 +350,38 @@ function showHoverState(){
         board.classList.remove('circle-hover');
         board.classList.add('cross-hover');
     }
+    if(gamemode == 'cpu'){
+        board.classList.remove('cross-hover');
+        board.classList.remove('circle-hover');
+        board.classList.add(`${getPlayer()}-hover`);
+    }
 }
 // add p1's icon to hover (at the start or restart)
-function setHoverStart(){
+function setHoverStart(gamemode){
+    // if(!circleTurn){
+    //     board.classList.add(`${crossCls}-hover`);
+    //     board.classList.forEach(className=>{
+    //         if(className != 'grid' && className != `${crossCls}-hover`){
+    //             board.classList.remove(className);
+    //         }
+    //     });
+    // }else{
+    //     board.classList.add(`${circleCls}-hover`);
+    //     board.classList.forEach(className=>{
+    //         if(className != 'grid' && className != `${circleCls}-hover`){
+    //             board.classList.remove(className);
+    //         }
+    //     });
+    // }
+    board.classList.remove(`${circleCls}-hover`)
     board.classList.add(`${crossCls}-hover`);
-    board.classList.forEach(className=>{
-        if(className != 'grid' && className != `${crossCls}-hover`){
-            board.classList.remove(className);
-        }
-    });
+    if(gamemode == 'cpu'){
+        board.classList.remove('circle-hover');
+        board.classList.remove('cross-hover');
+        board.classList.add(`${getPlayer()}-hover`);
+    }
 }
+
 function checkWin(currentCls){
     return winPatterns.some(pattern=>{
         return pattern.every(number =>{
