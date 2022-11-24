@@ -121,7 +121,6 @@ function restartScreen(){
         resetBoard();
         startGame(x);
     });
-
     hide(tieText);
 }
 
@@ -198,8 +197,7 @@ function startGame(x){
     grid.forEach(box=>{
         box.addEventListener('click', handeClick, {once:true});
     });
-    // get player one and let them start.
-    getPlayer() == circleCls ? circleTurn = true : circleTurn = false;
+    circleTurn = false;
 
     // if gamemode is cpu
 
@@ -232,7 +230,7 @@ function handeClick(e){
         addPoint(false);
     }
     showTurn(circleTurn);
-    showHoverState(); // !!!doesn't show correctly on the first turn if p1 is cross;
+    showHoverState();
 }
 
 function addPoint(currentCls){
@@ -306,9 +304,9 @@ function showHoverState(){
 }
 // add p1's icon to hover (at the start or restart)
 function setHoverStart(){
-    board.classList.add(`${getPlayer()}-hover`);
+    board.classList.add(`${crossCls}-hover`);
     board.classList.forEach(className=>{
-        if(className != 'grid' && className != `${getPlayer()}-hover`){
+        if(className != 'grid' && className != `${crossCls}-hover`){
             board.classList.remove(className);
         }
     });
