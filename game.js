@@ -199,6 +199,15 @@ function startGame(gamemode){
     });
     circleTurn = false;
     // if gamemode is cpu load cpu game
+    if(gamemode == 'cpu'){
+        if(getPlayer() == circleCls){
+            // firstMove();
+            setTimeout(()=>{
+                firstMove();
+            }, 200);
+            
+        }
+    }
 }
 
 // get player 1's symbol
@@ -211,7 +220,6 @@ function handleClick(e){
     restartBtn.addEventListener('click', restartGame);
     const currentCls = circleTurn  ? circleCls : crossCls; 
     const box = e.target;
-    console.log(gamemode);
     if(gamemode != 'cpu'){
         
         placeMark(box, currentCls);
@@ -236,25 +244,30 @@ function handleClick(e){
         const aiCls = getPlayer() == circleCls ? crossCls : circleCls;
         aiGame(aiCls);
         placeMark(box, getPlayer());
-        aiMove(aiCls);
+        setTimeout(()=>{
+            aiMove(aiCls)
+        }, 100);
         showHoverState(gamemode);
-        if(checkWin(aiCls)){
-            console.log('ai wins');
-        }else if(checkWin(getPlayer())){
-            console.log(getPlayer(), "wins");
+        console.log(currentCls);
+        if(checkWin(currentCls)){ // change the logic
+            console.log(currentCls,'wins');
+        }
+        else if(isDraw()){
+            console.log('draw');
         }
         // change winner check logic in this case
         
     }
 }
+// add first move by ai if it's  X-player
+function firstMove(){
+    aiMove(crossCls);
+}
 
 function aiMove(aiCls){
-    if(aiCls == crossCls){
-        availableSpot(aiCls);
-    }else if(aiCls == circleCls){
+    if(aiCls == crossCls || aiCls == circleCls){
         availableSpot(aiCls);
     }
-
 }
 
 
@@ -270,6 +283,8 @@ function availableSpot(aiCls){
     // add symbol to a random box
     let box = available[Math.floor(Math.random() * (available.length - 1))];
     if(box){
+        // stop responding to clicks
+        box.removeEventListener('click', handleClick);
         box.classList.add(aiCls);
     }else{
         console.log("no available places");
@@ -277,7 +292,7 @@ function availableSpot(aiCls){
 }
 function aiGame(aiCls){
     console.log("aiClass: ", aiCls);
-    circleTurn = false;
+    // circleTurn = false;
 }
 
 
@@ -325,8 +340,11 @@ function isDraw(){
 }
 
 function placeMark(box, currentCls){
-    box.classList.add(currentCls);
-    switchTurn();
+    if(box.classList.length == 0){
+        console.log(box.classList, 'assaasa');
+        box.classList.add(currentCls);
+        switchTurn();
+    }
 }
 
 // change the icon in the top to display the turn
