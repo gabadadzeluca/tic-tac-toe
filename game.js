@@ -215,13 +215,16 @@ function getPlayer(){
     const playerOne = document.querySelector('.player-1');
     return playerOne.id.slice(7);
 }
+
 function handleClick(e){
     // re-enable restart button
     restartBtn.addEventListener('click', restartGame);
-    const currentCls = circleTurn  ? circleCls : crossCls; 
+    // const currentCls = circleTurn  ? circleCls : crossCls; 
+    let currentCls = circleTurn  ? circleCls : crossCls; 
+    
     const box = e.target;
     if(gamemode != 'cpu'){
-        
+        console.log(circleTurn, 'CURRENT CLASS: ',currentCls);
         placeMark(box, currentCls);
         if(checkWin(currentCls)){
             // add points to the winner
@@ -241,37 +244,49 @@ function handleClick(e){
         showTurn(circleTurn);
         showHoverState(); // modify for cpu game
     }else if(gamemode == 'cpu'){
+        // console.log(circleTurn ,"current class: ",currentCls);
         const aiCls = getPlayer() == circleCls ? crossCls : circleCls;
-        aiGame(aiCls);
-        placeMark(box, getPlayer());
+        placeMark(box,currentCls);
         setTimeout(()=>{
-            aiMove(aiCls)
+            console.log(currentCls);
+            // currentCls = currentCls == circleCls ? crossCls : circleCls;
+            aiMove(currentCls);
         }, 100);
-        showHoverState(gamemode);
+        // change current class
+        currentCls = currentCls == circleCls ? crossCls : circleCls;
         console.log(currentCls);
-        if(checkWin(currentCls)){ // change the logic
-            console.log(currentCls,'wins');
+        if(checkWin(currentCls)){
+            console.log(currentCls, "wins");
         }
         else if(isDraw()){
-            console.log('draw');
+            console.log("draw");
         }
-        // change winner check logic in this case
         
+        // if(checkWin(currentCls)){ // change the logic
+        //     console.log(currentCls,'wins');
+        // }else if(isDraw()){
+        //     console.log('draw');
+        // }
+        showHoverState(gamemode);
+        // change winner check logic in this case
     }
 }
 // add first move by ai if it's  X-player
 function firstMove(){
-    aiMove(crossCls);
+    // aiMove(crossCls);
+    availableSpot(crossCls);
+    circleTurn = true;
 }
 
 function aiMove(aiCls){
-    if(aiCls == crossCls || aiCls == circleCls){
-        availableSpot(aiCls);
-    }
+    console.log(circleTurn ,"current class: ",aiCls);
+    availableSpot(aiCls);
+    switchTurn();
 }
 
 
-// return an available grid-box from the array
+
+// add symbol to a random available grid-box from the array
 function availableSpot(aiCls){
     available = [];
     grid.forEach(element =>{
@@ -279,21 +294,15 @@ function availableSpot(aiCls){
             available.push(element);
         }
     });
-    console.log(available);
     // add symbol to a random box
     let box = available[Math.floor(Math.random() * (available.length - 1))];
     if(box){
         // stop responding to clicks
         box.removeEventListener('click', handleClick);
         box.classList.add(aiCls);
-    }else{
-        console.log("no available places");
     }
 }
-function aiGame(aiCls){
-    console.log("aiClass: ", aiCls);
-    // circleTurn = false;
-}
+
 
 
 
@@ -341,7 +350,6 @@ function isDraw(){
 
 function placeMark(box, currentCls){
     if(box.classList.length == 0){
-        console.log(box.classList, 'assaasa');
         box.classList.add(currentCls);
         switchTurn();
     }
@@ -400,11 +408,11 @@ function setHoverStart(gamemode){
     }
 }
 
-function checkWin(currentCls){
+function checkWin(className){
     return winPatterns.some(pattern=>{
         return pattern.every(number =>{
             // there are 9 elements in the array and numbers get to 9 
-            return(grid[number-1].classList.contains(currentCls));
+            return(grid[number-1].classList.contains(className));
         });
     });
 }
