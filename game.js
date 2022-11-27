@@ -251,20 +251,29 @@ function handleClick(e){
             console.log(getPlayer(), "wins");
             displayWinner(getPlayer());
             outline(getPlayer());
-            addPoint(getPlayer());
             return;
-        }
-        else if(checkWin(aiCls)){
-            console.log(aiCls,"wins");
-            displayWinner(aiCls);
-            outline(aiCls);
-            addPoint(aiCls);
-            return;
-        }
-        else if(isDraw()){
+        }else if(isDraw()){
             displayDraw();
             addPoint();
         }
+        // if(checkWin(getPlayer())){
+        //     console.log(getPlayer(), "wins");
+        //     displayWinner(getPlayer());
+        //     outline(getPlayer());
+        //     addPoint(getPlayer());
+        //     return;
+        // }
+        // else if(checkWin(aiCls)){
+        //     console.log(aiCls,"wins");
+        //     displayWinner(aiCls);
+        //     outline(aiCls);
+        //     addPoint(aiCls);
+        //     return;
+        // }
+        // else if(isDraw()){
+        //     displayDraw();
+        //     addPoint();
+        // }
     }
 }
 // add first move by ai if it's  X-player
@@ -274,6 +283,12 @@ function firstMove(){
 
 function aiMove(aiCls){
     availableSpot(aiCls);
+    if(checkWin(aiCls) && !checkWin(getPlayer())){
+        console.log(aiCls, "wins");
+        displayWinner(aiCls);
+        outline(aiCls);
+        return; 
+   }
 }
 
 
