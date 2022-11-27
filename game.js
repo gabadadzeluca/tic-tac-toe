@@ -16,7 +16,7 @@ let circlePoints = 0;
 let crossPoints = 0;
 let countTies = 0;
 //who is to play
-let circleTurn;
+let circleTurn = false;
 const crossCls = 'cross';
 const circleCls = 'circle';
 
@@ -224,7 +224,6 @@ function handleClick(e){
     
     const box = e.target;
     if(gamemode != 'cpu'){
-        console.log(circleTurn, 'CURRENT CLASS: ',currentCls);
         placeMark(box, currentCls);
         if(checkWin(currentCls)){
             // add points to the winner
@@ -244,36 +243,32 @@ function handleClick(e){
         showTurn(circleTurn);
         showHoverState(); // modify for cpu game
     }else if(gamemode == 'cpu'){
-        // console.log(circleTurn ,"current class: ",currentCls);
+        currentCls = circleTurn ? circleCls : crossCls;
         const aiCls = getPlayer() == circleCls ? crossCls : circleCls;
-        placeMark(box,currentCls);
-        setTimeout(()=>{
-            console.log(currentCls);
-            // currentCls = currentCls == circleCls ? crossCls : circleCls;
-            aiMove(currentCls);
-        }, 100);
-        // change current class
-        currentCls = currentCls == circleCls ? crossCls : circleCls;
-        console.log(currentCls);
-        if(checkWin(currentCls)){
-            console.log(currentCls, "wins");
+        placeMark(box, currentCls);
+        aiMove(aiCls);
+        if(checkWin(aiCls)){
+            console.log(aiCls,"wins");
+            displayWinner(aiCls);
+            outline(aiCls);
+            addPoint(aiCls);
+            return;
+        }
+        else if(checkWin(getPlayer())){
+            console.log(getPlayer(), "wins");
+            displayWinner(getPlayer());
+            outline(getPlayer());
+            addPoint(getPlayer());
+            return;
         }
         else if(isDraw()){
-            console.log("draw");
+            displayDraw();
+            addPoint();
         }
-        
-        // if(checkWin(currentCls)){ // change the logic
-        //     console.log(currentCls,'wins');
-        // }else if(isDraw()){
-        //     console.log('draw');
-        // }
-        showHoverState(gamemode);
-        // change winner check logic in this case
     }
 }
 // add first move by ai if it's  X-player
 function firstMove(){
-    // aiMove(crossCls);
     availableSpot(crossCls);
     circleTurn = true;
 }
@@ -303,9 +298,6 @@ function availableSpot(aiCls){
     }
 }
 
-
-
-
 function addPoint(currentCls){
     if(!currentCls){
         // add points to the draw
@@ -319,7 +311,7 @@ function addPoint(currentCls){
     console.log("tie:", countTies);
 }
 
-function styleDivs(x){
+function styleDivs(gamemode){
     let colorP1 = getPlayer() == circleCls ? 'var(--light-yellow)' : 'var(--light-blue)';
     let colorP2 = getPlayer() == circleCls ? 'var(--light-blue)' : 'var(--light-yellow)';
     let nameP1 = getPlayer() == circleCls ? 'O (P1)' : 'X (P1)';
@@ -328,17 +320,18 @@ function styleDivs(x){
     blueBox.style.backgroundColor = colorP1;
     orangeBox.style.backgroundColor = colorP2;
 
-    if(x != 'cpu'){
+    if(gamemode != 'cpu'){
         iconBlueBox.innerHTML = nameP1;
         iconOrangeBox.innerHTML = nameP2;
-        if(getPlayer() == circleCls){
-            blueScore.innerHTML = circlePoints;
-            orangeScore.innerHTML = crossPoints;
-        }else{
-            orangeScore.innerHTML = circlePoints;
-            blueScore.innerHTML = crossPoints;
-        }
     }
+    if(getPlayer() == circleCls){
+        blueScore.innerHTML = circlePoints;
+        orangeScore.innerHTML = crossPoints;
+    }else{
+        orangeScore.innerHTML = circlePoints;
+        blueScore.innerHTML = crossPoints;
+    }
+    
     ties.innerHTML = countTies;
 }
 
@@ -384,21 +377,6 @@ function showHoverState(gamemode){
 }
 // add p1's icon to hover (at the start or restart)
 function setHoverStart(gamemode){
-    // if(!circleTurn){
-    //     board.classList.add(`${crossCls}-hover`);
-    //     board.classList.forEach(className=>{
-    //         if(className != 'grid' && className != `${crossCls}-hover`){
-    //             board.classList.remove(className);
-    //         }
-    //     });
-    // }else{
-    //     board.classList.add(`${circleCls}-hover`);
-    //     board.classList.forEach(className=>{
-    //         if(className != 'grid' && className != `${circleCls}-hover`){
-    //             board.classList.remove(className);
-    //         }
-    //     });
-    // }
     board.classList.remove(`${circleCls}-hover`)
     board.classList.add(`${crossCls}-hover`);
     if(gamemode == 'cpu'){
@@ -422,19 +400,38 @@ function checkWin(className){
 // display winner screen
 function displayWinner(currentCls){
     messageScreen();
-    // hide other elements
-    [restartElements, soloElements].forEach(array=>{
-        array.forEach(item=>{
-            hide(item);
-        });
+    restartElements.forEach(item=>{
+        hide(item);
     });
     winnerElements.forEach(element=>{
         show(element, 'flex');
     });
     endButtons.forEach(button=>{
         show(button, 'block');
-    })
-
+    });
+    // hide other elements
+    if(gamemode == 'multiplayer'){
+        soloElements.forEach(element=>{
+            hide(element);
+        });
+    }else{// if gamemode is cpu
+        multiplayerElements.forEach(element=>{
+            hide(element);
+        });
+        soloElements.forEach(element=>{
+            show(element, 'block');
+        });
+        
+        const winningText= document.getElementById('text-win');
+        const losingText = document.getElementById('text-lose');
+        if(currentCls == getPlayer()){
+            show(winningText, 'block');
+            hide(losingText);
+        }else{
+            show(losingText, 'block');
+            hide(winningText);
+        }
+    }
     //hide tie text
     hide(tieText);
     displayColorAndSymbol(currentCls);
