@@ -245,20 +245,20 @@ function handleClick(e){
     }else if(gamemode == 'cpu'){
         currentCls = circleTurn ? circleCls : crossCls;
         const aiCls = getPlayer() == circleCls ? crossCls : circleCls;
-        placeMark(box, currentCls);
+        placeMark(box, getPlayer());
         aiMove(aiCls);
-        if(checkWin(aiCls)){
-            console.log(aiCls,"wins");
-            displayWinner(aiCls);
-            outline(aiCls);
-            addPoint(aiCls);
-            return;
-        }
-        else if(checkWin(getPlayer())){
+        if(checkWin(getPlayer())){
             console.log(getPlayer(), "wins");
             displayWinner(getPlayer());
             outline(getPlayer());
             addPoint(getPlayer());
+            return;
+        }
+        else if(checkWin(aiCls)){
+            console.log(aiCls,"wins");
+            displayWinner(aiCls);
+            outline(aiCls);
+            addPoint(aiCls);
             return;
         }
         else if(isDraw()){
@@ -270,13 +270,10 @@ function handleClick(e){
 // add first move by ai if it's  X-player
 function firstMove(){
     availableSpot(crossCls);
-    circleTurn = true;
 }
 
 function aiMove(aiCls){
-    console.log(circleTurn ,"current class: ",aiCls);
     availableSpot(aiCls);
-    switchTurn();
 }
 
 
