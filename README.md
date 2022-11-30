@@ -26,8 +26,8 @@ Users should be able to:
 
 ### Screenshot
 
-![](../../../../D:/BitCamp%202022/Assignment%2012/tic-tac-toe/screenshot1.png)
-![](../../../../D:/BitCamp%202022/Assignment%2012/tic-tac-toe/screenshot2.png)
+![](screenshot1.png)
+![](screenshot2.png)
 
 
 
