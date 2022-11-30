@@ -201,9 +201,10 @@ function startGame(gamemode){
     // if gamemode is cpu load cpu game
     if(gamemode == 'cpu'){
         if(getPlayer() == circleCls){
-            // firstMove();
             setTimeout(()=>{
                 firstMove();
+                circleTurn = true;
+                showTurn(circleTurn);
             }, 200);
             
         }
@@ -221,7 +222,6 @@ function handleClick(e){
     restartBtn.addEventListener('click', restartGame);
     // const currentCls = circleTurn  ? circleCls : crossCls; 
     let currentCls = circleTurn  ? circleCls : crossCls; 
-    
     const box = e.target;
     if(gamemode != 'cpu'){
         placeMark(box, currentCls);
@@ -243,54 +243,63 @@ function handleClick(e){
         showTurn(circleTurn);
         showHoverState(); // modify for cpu game
     }else if(gamemode == 'cpu'){
-        currentCls = circleTurn ? circleCls : crossCls;
         const aiCls = getPlayer() == circleCls ? crossCls : circleCls;
+        circleTurn = getPlayer() == circleCls ? false : true;
+        showTurn(circleTurn);
         placeMark(box, getPlayer());
-        aiMove(aiCls);
+        // prevent from making a move if there's a winner
+        if(!checkWin(getPlayer())){
+            aiMove(aiCls);
+        }
         if(checkWin(getPlayer())){
             console.log(getPlayer(), "wins");
             displayWinner(getPlayer());
             outline(getPlayer());
+            addPoint(getPlayer());
+            grid.forEach(box=>{
+                box.removeEventListener('click', handleClick);
+            });
             return;
         }else if(isDraw()){
             displayDraw();
             addPoint();
+            grid.forEach(box=>{
+                box.removeEventListener('click', handleClick);
+            });
         }
-        // if(checkWin(getPlayer())){
-        //     console.log(getPlayer(), "wins");
-        //     displayWinner(getPlayer());
-        //     outline(getPlayer());
-        //     addPoint(getPlayer());
-        //     return;
-        // }
-        // else if(checkWin(aiCls)){
-        //     console.log(aiCls,"wins");
-        //     displayWinner(aiCls);
-        //     outline(aiCls);
-        //     addPoint(aiCls);
-        //     return;
-        // }
-        // else if(isDraw()){
-        //     displayDraw();
-        //     addPoint();
-        // }
     }
 }
-// add first move by ai if it's  X-player
+
+// add first move by ai (X-player)
 function firstMove(){
     availableSpot(crossCls);
 }
 
 function aiMove(aiCls){
-    availableSpot(aiCls);
-    if(checkWin(aiCls) && !checkWin(getPlayer())){
-        console.log(aiCls, "wins");
-        displayWinner(aiCls);
-        outline(aiCls);
-        return; 
-   }
-}
+    setTimeout(()=>{
+        showTurn(circleTurn);
+        availableSpot(aiCls);
+        // check if ai is winner or for a draw
+        if(checkWin(aiCls) && !checkWin(getPlayer())){
+            console.log(aiCls, "wins");
+            displayWinner(aiCls);
+            outline(aiCls);
+            addPoint(aiCls);
+            grid.forEach(box=>{
+                box.removeEventListener('click', handleClick);
+            });
+            return; 
+        }else if(isDraw()){
+            displayDraw();
+            addPoint();
+            grid.forEach(box=>{
+                box.removeEventListener('click', handleClick);
+            });
+        }
+        switchTurn();
+    }, 200);
 
+}
 
 
 // add symbol to a random available grid-box from the array
