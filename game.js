@@ -251,7 +251,7 @@ function handleClick(e){
         if(!checkWin(getPlayer())){
             aiMove(aiCls);
         }
-        if(checkWin(getPlayer())){
+        else if(checkWin(getPlayer())){
             console.log(getPlayer(), "wins");
             displayWinner(getPlayer());
             outline(getPlayer());
@@ -266,6 +266,7 @@ function handleClick(e){
             grid.forEach(box=>{
                 box.removeEventListener('click', handleClick);
             });
+            return;
         }
     }
 }
@@ -295,6 +296,7 @@ function aiMove(aiCls){
             grid.forEach(box=>{
                 box.removeEventListener('click', handleClick);
             });
+            return;
         }
         switchTurn();
     }, 200);
