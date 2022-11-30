@@ -26,14 +26,15 @@ Users should be able to:
 
 ### Screenshot
 
-![]()
+![](../../../../D:/BitCamp%202022/Assignment%2012/tic-tac-toe/screenshot1.png)
+![](../../../../D:/BitCamp%202022/Assignment%2012/tic-tac-toe/screenshot2.png)
 
 
 
 ### Links
 
 - Solution URL: [GitHub](https://github.com/gabadadzeluca/tic-tac-toe)
-- Live Site URL: [Live URL]()
+- Live Site URL: [Live URL](https://gabadadzeluca.github.io/tic-tac-toe/)
 
 ## My process
 

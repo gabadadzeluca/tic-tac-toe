@@ -437,6 +437,8 @@ function displayWinner(currentCls){
         soloElements.forEach(element=>{
             hide(element);
         });
+        let num =  getPlayer() == currentCls ? 1 : 2;
+        winnerNum.innerHTML = `${num}`; 
     }else{// if gamemode is cpu
         multiplayerElements.forEach(element=>{
             hide(element);

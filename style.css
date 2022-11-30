@@ -90,6 +90,10 @@ body button:hover {
   background-repeat: no-repeat;
   background-size: 3.2rem;
 }
+.start-board #p1-choice div:not(.player-1):hover {
+  background-color: var(--semi-dark-navy);
+  cursor: pointer;
+}
 .start-board #p1-choice .x {
   background-image: url("assets/icon-x.svg");
 }
@@ -127,6 +131,12 @@ body button:hover {
 .start-board .buttons-start #player-btn {
   background-color: var(--light-blue);
   box-shadow: inset 0rem -0.8rem 0rem #118C87;
+}
+.start-board .buttons-start #cpu-btn:hover {
+  background-color: var(--light-yellow-hover);
+}
+.start-board .buttons-start #player-btn:hover {
+  background-color: var(--light-blue-hover);
 }
 
 #game-board {
@@ -179,6 +189,9 @@ body button:hover {
   border-radius: 0.5rem;
   border: none;
   box-shadow: inset 0px -4px 0px #6B8997;
+}
+#game-board .inline #restart-btn:hover {
+  filter: brightness(1.5);
 }
 #game-board .grid {
   margin-top: 6.4rem;
@@ -325,6 +338,9 @@ body button:hover {
   width: 27.9rem;
   width: 100%;
 }
+.end-screen #end-box #winner-num {
+  margin: 0 0.3rem;
+}
 .end-screen #end-box button {
   padding: 0 1.6rem;
   width: -webkit-max-content;
@@ -355,6 +371,12 @@ body button:hover {
   font-weight: var(--bold);
   font-size: 2.4rem;
   letter-spacing: 0.15rem;
+}
+.end-screen #end-box .next-rd:hover, .end-screen #end-box .cont:hover {
+  background-color: var(--light-yellow-hover);
+}
+.end-screen #end-box .quit:hover, .end-screen #end-box .cancel:hover {
+  background-color: var(--silver-hover);
 }
 .end-screen #end-box .multiplayer, .end-screen #end-box .restart {
   display: none;
